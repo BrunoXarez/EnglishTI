@@ -1,0 +1,240 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-image: url('img/bg.eng.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+.header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 30px;
+    border-radius: 8px;
+}
+
+.header h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+/* Content Sections - Dropdown */
+.content-section {
+    background-color: white;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.dropdown-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    cursor: pointer;
+    background-color: white;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-header:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-header h2 {
+    color: #2c3e50;
+    font-size: 1.6em;
+    margin: 0;
+    border-bottom: none;
+    padding: 0;
+}
+
+.dropdown-icon {
+    color: #3498db;
+    font-size: 0.8em;
+    transition: transform 0.3s ease;
+}
+
+.dropdown.active .dropdown-icon {
+    transform: rotate(180deg);
+}
+
+.dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    padding: 0 25px;
+}
+
+.dropdown.active .dropdown-content {
+    max-height: 500px;
+    padding: 0 25px 20px 25px;
+}
+
+.dropdown-content p {
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.8;
+    margin: 0;
+    padding-top: 15px;
+}
+
+/* Glossary Section */
+.glossary-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top: 30px;
+}
+
+.glossary-section h2 {
+    color: #2c3e50;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-align: center;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.glossary-card {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 2px solid #e0e0e0;
+    text-align: center;
+    cursor: pointer;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.glossary-card:hover {
+    border-color: #3498db;
+}
+
+.glossary-card h3 {
+    color: #2c3e50;
+    font-size: 0.95em;
+    margin: 0;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+}
+
+.glossary-card.active {
+    background-color: #3498db;
+    border-color: #2980b9;
+    color: white;
+}
+
+.glossary-card.active h3 {
+    color: white;
+}
+
+/* Template Widget Section */
+.template-widget {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.widget-content {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.widget-text {
+    flex: 1;
+}
+
+.widget-text h3 {
+    color: #2c3e50;
+    font-size: 1.8em;
+    margin-bottom: 15px;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 8px;
+}
+
+.widget-text p {
+    color: #555;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+.widget-image {
+    flex-shrink: 0;
+}
+
+.widget-image img {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .header h1 {
+        font-size: 1.8em;
+    }
+
+    .glossary-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        max-height: 150px;
+    }
+
+    .dropdown-header h2 {
+        font-size: 1.3em;
+    }
+
+    .widget-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .widget-image img {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .widget-text h3 {
+        font-size: 1.5em;
+    }
+}
