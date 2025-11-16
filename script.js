@@ -30,12 +30,104 @@ const itTerms = [
 const termTitleElement = document.getElementById('termTitle');
 const termDescriptionElement = document.getElementById('termDescription');
 const termPhotoElement = document.getElementById('termPhoto');
+const voiceButton = document.getElementById('voiceButton');
+
+// Text-to-Speech functionality
+let isSpeaking = false;
+let currentUtterance = null;
+
+function speakText(text) {
+    // Stop any current speech
+    if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        voiceButton.classList.remove('playing');
+        return;
+    }
+
+    // Check if browser supports speech synthesis
+    if ('speechSynthesis' in window) {
+        // Create a new utterance
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        // Configure voice settings
+        utterance.rate = 0.9; // Slightly slower for clarity
+        utterance.pitch = 1;
+        utterance.volume = 1;
+        
+        // Try to use a natural-sounding English voice
+        const voices = window.speechSynthesis.getVoices();
+        const englishVoice = voices.find(voice => 
+            voice.lang.startsWith('en') && voice.localService === false
+        ) || voices.find(voice => voice.lang.startsWith('en'));
+        
+        if (englishVoice) {
+            utterance.voice = englishVoice;
+        }
+        
+        // Event handlers
+        utterance.onstart = () => {
+            isSpeaking = true;
+            voiceButton.classList.add('playing');
+        };
+        
+        utterance.onend = () => {
+            isSpeaking = false;
+            voiceButton.classList.remove('playing');
+        };
+        
+        utterance.onerror = (event) => {
+            console.error('Speech synthesis error:', event);
+            isSpeaking = false;
+            voiceButton.classList.remove('playing');
+        };
+        
+        currentUtterance = utterance;
+        window.speechSynthesis.speak(utterance);
+    } else {
+        alert('Your browser does not support text-to-speech. Please use a modern browser like Chrome, Firefox, or Edge.');
+    }
+}
+
+// Load voices when available (some browsers need this)
+if ('speechSynthesis' in window) {
+    // Chrome loads voices asynchronously
+    window.speechSynthesis.onvoiceschanged = () => {
+        // Voices are now loaded
+    };
+}
+
+// Voice button click handler (will be initialized in DOMContentLoaded)
+function initVoiceButton() {
+    if (voiceButton) {
+        voiceButton.addEventListener('click', function() {
+            const title = termTitleElement.textContent;
+            const description = termDescriptionElement.textContent;
+            
+            // Don't read if it's the default placeholder text
+            if (title === 'Select a term' || description === 'Click on a term above to see its definition') {
+                return;
+            }
+            
+            // Combine title and description
+            const textToSpeak = `${title}. ${description}`;
+            speakText(textToSpeak);
+        });
+    }
+}
 
 // Function to update the template widget
 function updateTemplate(termId) {
     const term = itTerms.find(t => t.id === termId);
     
     if (term) {
+        // Stop any ongoing speech when switching terms
+        if (isSpeaking) {
+            window.speechSynthesis.cancel();
+            isSpeaking = false;
+            voiceButton.classList.remove('playing');
+        }
+        
         termTitleElement.textContent = term.term;
         termDescriptionElement.textContent = term.definition;
         termPhotoElement.src = term.photo;
@@ -87,6 +179,7 @@ function initDropdowns() {
 document.addEventListener('DOMContentLoaded', function() {
     createGlossary();
     initDropdowns();
+    initVoiceButton();
     // Initialize with first term
     if (itTerms.length > 0) {
         updateTemplate(0);
