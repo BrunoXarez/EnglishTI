@@ -248,9 +248,11 @@ body {
     width: 200px;
     height: 200px;
     border-radius: 8px;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    background-color: #fff;
+    padding: 6px;
 }
 
 /* Responsive Design */
