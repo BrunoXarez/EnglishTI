@@ -1,4 +1,3 @@
-// IT Terms Glossary Data
 const itTerms = [
     { id: 0, term: "CPU", definition: "Central Processing Unit - The brain of the computer", photo: "img/imgglos/cpu.jpg" },
     { id: 1, term: "Hardware", definition: "The physical parts of a computer, like the keyboard, monitor, and hard drive. These components work together to process and store information and allow users to interact with the system.", photo: "img/imgglos/hardware.jpg" },
@@ -22,18 +21,15 @@ const itTerms = [
     { id: 19, term: "Upload", definition: "To send data or files from your device to the internet or another computer. Uploading is used when sharing files, posting photos, or transferring documents to online platforms or cloud storage.", photo: "img/imgglos/upload.png" }
 ];
 
-// Get DOM elements
 const termTitleElement = document.getElementById('termTitle');
 const termDescriptionElement = document.getElementById('termDescription');
 const termPhotoElement = document.getElementById('termPhoto');
 const voiceButton = document.getElementById('voiceButton');
 
-// Text-to-Speech functionality
 let isSpeaking = false;
 let currentUtterance = null;
 
 function speakText(text) {
-    // Stop any current speech
     if (isSpeaking) {
         window.speechSynthesis.cancel();
         isSpeaking = false;
@@ -41,17 +37,13 @@ function speakText(text) {
         return;
     }
 
-    // Check if browser supports speech synthesis
     if ('speechSynthesis' in window) {
-        // Create a new utterance
         const utterance = new SpeechSynthesisUtterance(text);
         
-        // Configure voice settings
-        utterance.rate = 0.9; // Slightly slower for clarity
+        utterance.rate = 0.9;
         utterance.pitch = 1;
         utterance.volume = 1;
         
-        // Try to use a natural-sounding English voice
         const voices = window.speechSynthesis.getVoices();
         const englishVoice = voices.find(voice => 
             voice.lang.startsWith('en') && voice.localService === false
@@ -61,7 +53,6 @@ function speakText(text) {
             utterance.voice = englishVoice;
         }
         
-        // Event handlers
         utterance.onstart = () => {
             isSpeaking = true;
             voiceButton.classList.add('playing');
@@ -85,39 +76,31 @@ function speakText(text) {
     }
 }
 
-// Load voices when available (some browsers need this)
 if ('speechSynthesis' in window) {
-    // Chrome loads voices asynchronously
     window.speechSynthesis.onvoiceschanged = () => {
-        // Voices are now loaded
     };
 }
 
-// Voice button click handler (will be initialized in DOMContentLoaded)
 function initVoiceButton() {
     if (voiceButton) {
         voiceButton.addEventListener('click', function() {
             const title = termTitleElement.textContent;
             const description = termDescriptionElement.textContent;
             
-            // Don't read if it's the default placeholder text
             if (title === 'Select a term' || description === 'Click on a term above to see its definition') {
                 return;
             }
             
-            // Combine title and description
             const textToSpeak = `${title}. ${description}`;
             speakText(textToSpeak);
         });
     }
 }
 
-// Function to update the template widget
 function updateTemplate(termId) {
     const term = itTerms.find(t => t.id === termId);
     
     if (term) {
-        // Stop any ongoing speech when switching terms
         if (isSpeaking) {
             window.speechSynthesis.cancel();
             isSpeaking = false;
@@ -131,7 +114,6 @@ function updateTemplate(termId) {
     }
 }
 
-// Function to create glossary cards
 function createGlossary() {
     const glossaryGrid = document.getElementById('glossaryGrid');
     
@@ -143,13 +125,9 @@ function createGlossary() {
             <h3>${term.term}</h3>
         `;
         
-        // Add click event listener
         card.addEventListener('click', function() {
-            // Remove active class from all cards
             document.querySelectorAll('.glossary-card').forEach(c => c.classList.remove('active'));
-            // Add active class to clicked card
             this.classList.add('active');
-            // Update template
             const termId = parseInt(this.getAttribute('data-id'));
             updateTemplate(termId);
         });
@@ -158,7 +136,6 @@ function createGlossary() {
     });
 }
 
-// Initialize dropdowns
 function initDropdowns() {
     const dropdowns = document.querySelectorAll('.dropdown');
     
@@ -171,12 +148,10 @@ function initDropdowns() {
     });
 }
 
-// Initialize glossary when page loads
 document.addEventListener('DOMContentLoaded', function() {
     createGlossary();
     initDropdowns();
     initVoiceButton();
-    // Initialize with first term
     if (itTerms.length > 0) {
         updateTemplate(0);
         document.querySelectorAll('.glossary-card')[0].classList.add('active');
